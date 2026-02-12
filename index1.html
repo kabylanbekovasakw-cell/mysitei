@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Приглашение</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #c76868 0%, #9c3636 50%, #752222 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Анимированные плавающие сердечки на фоне */
+        .hearts-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(77, 69, 69, 0.25), 
+                        0 0 100px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Стикеры-эмодзи */
+        .sticker {
+            font-size: 60px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+            filter: drop-shadow(0 5px 15px rgba(95, 86, 86, 0.1));
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .sticker-2 {
+            animation-delay: 0.3s;
+            font-size: 40px;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+        }
+        
+        .sticker-3 {
+            animation-delay: 0.6s;
+            font-size: 35px;
+            position: absolute;
+            bottom: -15px;
+            left: 20px;
+        }
+        
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5em;
+            color: #a33939;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            line-height: 1.2;
+        }
+        
+        .question {
+            font-size: 1.3em;
+            color: #555;
+            margin: 30px 0;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 80px;
+        }
+        
+        button {
+            border: none;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Кнопка ДА */
+        .btn-yes {
+            background: linear-gradient(135deg, #df9393 0%, #af6161 100%);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(234, 102, 102, 0.4);
+            transform: scale(1);
+        }
+        
+        .btn-yes:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn-yes:active {
+            transform: scale(0.95);
+        }
+        
+        /* Кнопка НЕТ - теперь убегает! */
+        .btn-no {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+            position: absolute;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .btn-no:hover {
+            background: #ff5252;
+        }
+        
+        /* Конфетти для победы */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Экран успеха */
+        .success-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ea6666 0%, #a24b4b 100%);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .success-content {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        /* Стили для мишек как в TikTok */
+        .bears-scene {
+            position: relative;
+            width: 350px;
+            height: 250px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 20px;
+        }
+        
+        .bear-character {
+            position: absolute;
+            bottom: 40px;
+            width: 100px;
+            height: 120px;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .bear-brown {
+            left: 60px;
+            animation: bearHugLeft 2.5s ease-in-out infinite;
+        }
+        
+        .bear-white {
+            right: 60px;
+            animation: bearHugRight 2.5s ease-in-out infinite;
+        }
+        
+        /* Тело мишки */
+        .bear-body {
+            width: 80px;
+            height: 90px;
+            background: #8B4513;
+            border-radius: 40px 40px 35px 35px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .bear-white .bear-body {
+            background: #F5F5DC;
+        }
+        
+        /* Ушки */
+        .bear-ear {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 50%;
+            top: -10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .bear-white .bear-ear {
+            background: #F5F5DC;
+        }
+        
+        .bear-ear.left { left: 10px; }
+        .bear-ear.right { right: 10px; }
+        
+        .bear-ear-inner {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #D2691E;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+        
+        .bear-white .bear-ear-inner {
+            background: #FFE4E1;
+        }
+        
+        /* Мордочка */
+        .bear-face {
+            position: absolute;
+            width: 60px;
+            height: 50px;
+            background: #D2691E;
+            border-radius: 30px;
+            top: 20px;
+            left: 10px;
+        }
+        
+        .bear-white .bear-face {
+            background: #FFF8DC;
+        }
+        
+        /* Глазки */
+        .bear-eye {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+            top: 15px;
+            animation: blink 3s infinite;
+        }
+        
+        .bear-eye.left { left: 15px; }
+        .bear-eye.right { right: 15px; }
+        
+        @keyframes blink {
+            0%, 96%, 100% { transform: scaleY(1); }
+            98% { transform: scaleY(0.1); }
+        }
+        
+        /* Щёчки */
+        .bear-cheek {
+            position: absolute;
+            width: 12px;
+            height: 8px;
+            background: #FFB6C1;
+            border-radius: 50%;
+            top: 22px;
+            opacity: 0.6;
+        }
+        
+        .bear-cheek.left { left: 8px; }
+        .bear-cheek.right { right: 8px; }
+        
+        /* Носик */
+        .bear-nose {
+            position: absolute;
+            width: 12px;
+            height: 8px;
+            background: #333;
+            border-radius: 6px;
+            top: 22px;
+            left: 24px;
+        }
+        
+        /* Ротик (улыбка) */
+        .bear-mouth {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            border: 2px solid #333;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            top: 28px;
+            left: 20px;
+        }
+        
+        /* Лапки для обнимашек */
+        .bear-paw {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            background: #8B4513;
+            border-radius: 15px;
+            bottom: 10px;
+            transition: all 0.8s ease;
+        }
+        
+        .bear-white .bear-paw {
+            background: #F5F5DC;
+        }
+        
+        .bear-paw.left { 
+            left: -10px; 
+            transform: rotate(-20deg);
+        }
+        .bear-paw.right { 
+            right: -10px; 
+            transform: rotate(20deg);
+        }
+        
+        /* Анимация обнимашек */
+        @keyframes bearHugLeft {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(40px) rotate(-5deg); }
+        }
+        
+        @keyframes bearHugRight {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(-40px) rotate(5deg); }
+        }
+        
+        /* Плавающие сердечки */
+        .love-hearts {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .floating-heart {
+            position: absolute;
+            font-size: 24px;
+            animation: heartFloat 2s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        .floating-heart:nth-child(1) { animation-delay: 0s; left: -30px; }
+        .floating-heart:nth-child(2) { animation-delay: 0.5s; left: 0px; }
+        .floating-heart:nth-child(3) { animation-delay: 1s; left: 30px; }
+        
+        @keyframes heartFloat {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
+        }
+        
+        .success-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 3em;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+        
+        .restart-btn {
+            margin-top: 30px;
+            background: white;
+            color: #833232;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border: none;
+            font-weight: 700;
+            transition: transform 0.3s;
+        }
+        
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Декоративные элементы */
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 20px;
+            animation: sparkle 2s infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Плавающие сердечки -->
+    <div class="hearts-bg" id="heartsContainer"></div>
+    
+    <!-- Главный контейнер -->
+    <div class="container" id="mainContainer">
+        <div class="sticker sticker-2">✨</div>
+        <div class="sticker">💝</div>
+        <div class="sticker sticker-3">🌸</div>
+        
+        <h1>Пойдём<br>на ПСКУ?</h1>
+        
+        <div class="question">
+            У меня нет денег<br>
+            но го сенин акшана проводим вечер 🥰😘
+        </div>
+        
+        <div class="buttons" id="buttonsContainer">
+            <button class="btn-yes" onclick="sayYes()">
+                ехала ❤️
+            </button>
+            <button class="btn-no" id="noBtn" onmouseover="runAway()" onclick="caughtNo()">
+                динахуй
+            </button>
+        </div>
+    </div>
+    
+    <!-- Экран успеха -->
+    <div class="success-screen" id="successScreen">
+        <div class="success-content">
+            <!-- Мишки обнимашки как в TikTok -->
+            <div class="bears-scene">
+                <!-- Летающие сердечки -->
+                <div class="love-hearts">
+                    <div class="floating-heart">💕</div>
+                    <div class="floating-heart">💖</div>
+                    <div class="floating-heart">💗</div>
+                </div>
+                
+                <!-- Коричневый мишка -->
+                <div class="bear-character bear-brown">
+                    <div class="bear-ear left"><div class="bear-ear-inner"></div></div>
+                    <div class="bear-ear right"><div class="bear-ear-inner"></div></div>
+                    <div class="bear-body">
+                        <div class="bear-face">
+                            <div class="bear-eye left"></div>
+                            <div class="bear-eye right"></div>
+                            <div class="bear-cheek left"></div>
+                            <div class="bear-cheek right"></div>
+                            <div class="bear-nose"></div>
+                            <div class="bear-mouth"></div>
+                        </div>
+                    </div>
+                    <div class="bear-paw left"></div>
+                    <div class="bear-paw right"></div>
+                </div>
+                
+                <!-- Белый мишка -->
+                <div class="bear-character bear-white">
+                    <div class="bear-ear left"><div class="bear-ear-inner"></div></div>
+                    <div class="bear-ear right"><div class="bear-ear-inner"></div></div>
+                    <div class="bear-body">
+                        <div class="bear-face">
+                            <div class="bear-eye left"></div>
+                            <div class="bear-eye right"></div>
+                            <div class="bear-cheek left"></div>
+                            <div class="bear-cheek right"></div>
+                            <div class="bear-nose"></div>
+                            <div class="bear-mouth"></div>
+                        </div>
+                    </div>
+                    <div class="bear-paw left"></div>
+                    <div class="bear-paw right"></div>
+                </div>
+            </div>
+            
+            <div class="success-text">Ура!<br>Ты сказал ДАА омг!</div>
+            <p style="font-size: 1.3em; margin-top: 20px;">встретимся в субботу вечером (если свободен)🌹</p>
+        </div>
+    </div>
+
+    <script>
+        // Создаём плавающие сердечки
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const hearts = ['💕', '💖', '💗', '💓', '💝'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 7000);
+            }, 800);
+        }
+        
+        createHearts();
+        
+        let noBtn = document.getElementById('noBtn');
+        let container = document.getElementById('buttonsContainer');
+        let isCaught = false;
+        
+        // Кнопка убегает от курсора
+        function runAway() {
+            if (isCaught) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            // Максимальные смещения в пределах контейнера
+            const maxX = containerRect.width - btnRect.width;
+            const maxY = 200; // высота для бегства
+            
+            // Случайное направление
+            const randomX = Math.random() * maxX - (btnRect.left - containerRect.left);
+            const randomY = Math.random() * maxY - 100;
+            
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+        
+        // Поймали кнопку!
+        function caughtNo() {
+            if (isCaught) return;
+            isCaught = true;
+            
+            noBtn.innerHTML = 'ну ладно го 😏';
+            noBtn.style.transform = 'translate(0, 0) scale(1.2)';
+            noBtn.style.background = '#4CAF50';
+            
+            // Через секунду показываем успех
+            setTimeout(() => {
+                sayYes();
+            }, 800);
+        }
+        
+        // При клике на "ехала"
+        function sayYes() {
+            // Создаём конфетти
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => createConfetti(), i * 50);
+            }
+            
+            // Показываем экран успеха
+            setTimeout(() => {
+                document.getElementById('successScreen').style.display = 'flex';
+            }, 500);
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 3000);
+        }
+        
+        // Добавляем искорки при движении мыши
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.97) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.innerHTML = '✨';
+                sparkle.style.left = e.pageX + 'px';
+                sparkle.style.top = e.pageY + 'px';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 2000);
+            }
+        });
+    </script>
+</body>
+</html>
